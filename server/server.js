@@ -12,13 +12,23 @@ var io = socketIO(server);
 app.use(express.static(publicPath));
 
 io.on('connection', (socket) => {
-  console.log('New user connected');
+    console.log('New user connected');
 
-  socket.on('disconnect', () => {
-    console.log('User was disconnected');
-  });
+    socket.emit('newMsg', {
+        from: 'damocastor@gmail.com',
+        text: "New message!", 
+        createAt: new Date()
+    });
+
+    socket.on('createMsg', (newMsg) => {
+        console.log('createMsg', newMsg)
+    }); 
+
+    socket.on('disconnect', () => {
+        console.log('User was disconnected');
+    });
 });
 
 server.listen(port, () => {
-  console.log(`Server is up on ${port}`);
+    console.log(`Server is up on ${port}`);
 });
